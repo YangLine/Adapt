@@ -49,8 +49,14 @@ jobs:
 
     - name: Build Adapt
       run: ./gradlew adapt
-    - name: Package
-      uses: actions/upload-artifact@v1
+
+    - name: Package JAR
+      run: |
+        find ${{ github.workspace }}/build -maxdepth 1 -type f -name '*.jar' -exec zip -r output.zip {} +
+        mv output.zip ${{ github.workspace }}/build
+
+    - name: Upload JAR
+      uses: actions/upload-artifact@v2
       with:
         name: Output
-        path: ${{ github.workspace }}/build
+        path: ${{ github.workspace }}/build/output.zip
